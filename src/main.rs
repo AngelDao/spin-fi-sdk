@@ -61,7 +61,7 @@ async fn main() -> Result<(), ()> {
     // }
     // println!("{:?}", type_of(response));
     if let QueryResponseKind::CallResult(result) = response.kind {
-        let dres = Deserialize::deserialize(result.result);
+        let dres = result.result;
         println!("{:#?}", dres);
     }
 
