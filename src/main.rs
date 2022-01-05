@@ -78,7 +78,9 @@ async fn main() -> Result<(), ()> {
     // println!("{:?}", type_of(response));
     if let QueryResponseKind::CallResult(result) = response.kind {
         let dres = result.result;
-        println!("{:#?}", from_slice::<AllMarkets>(&dres));
+        let drestest: AllMarkets = from_slice(&dres).expect("failed");
+        // println!("{:#?}", from_slice::<AllMarkets>(&dres));
+        println!("{:#?}", drestest);
     }
 
     Ok(())
