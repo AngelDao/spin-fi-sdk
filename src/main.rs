@@ -1,3 +1,4 @@
+extern crate borsh;
 extern crate near_jsonrpc_client;
 extern crate near_jsonrpc_primitives;
 extern crate near_primitives;
@@ -9,10 +10,10 @@ use near_jsonrpc_primitives::types::query::QueryResponseKind;
 use near_jsonrpc_primitives::types::transactions::TransactionInfo;
 use near_primitives::types::{BlockReference, Finality, FunctionArgs};
 use near_primitives::views::{CallResult, QueryRequest};
-
 use std::fmt::Debug;
+use std::iter::Map;
 
-use serde::de::Deserialize;
+use serde::Deserialize;
 use serde_json::{from_slice, json};
 
 use std::any::type_name;
@@ -20,6 +21,21 @@ use std::any::type_name;
 fn type_of<T>(_: T) -> &'static str {
     type_name::<T>()
 }
+
+#[derive(Debug, Deserialize)]
+pub struct Market {
+    pub market_id: u8,
+    pub base: String,
+    pub quote: String,
+}
+
+// type Market = (u8, String, String);
+
+// #[derive(Debug, Deserialize)]
+type AllMarkets = Vec<Market>;
+
+// #[derive(Debug, Deserialize)]
+// type AllMarkets = Map<String, AllMarketsArray>;
 
 #[tokio::main]
 async fn main() -> Result<(), ()> {
@@ -62,7 +78,7 @@ async fn main() -> Result<(), ()> {
     // println!("{:?}", type_of(response));
     if let QueryResponseKind::CallResult(result) = response.kind {
         let dres = result.result;
-        println!("{:#?}", dres);
+        println!("{:#?}", from_slice::<AllMarkets>(&dres));
     }
 
     Ok(())
