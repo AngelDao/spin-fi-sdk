@@ -23,10 +23,22 @@ fn type_of<T>(_: T) -> &'static str {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct Base {
+    pub ticker: String,
+    pub decimal: u8,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Quote {
+    pub ticker: String,
+    pub decimal: u8,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct Market {
-    pub market_id: u8,
-    pub base: String,
-    pub quote: String,
+    pub id: u8,
+    pub base: Base,
+    pub quote: Quote,
 }
 
 // type Market = (u8, String, String);
@@ -79,6 +91,7 @@ async fn main() -> Result<(), ()> {
     if let QueryResponseKind::CallResult(result) = response.kind {
         let dres = result.result;
         // let drestest: AllMarkets = from_slice(&dres).expect("failed");
+        // println!("{:#?}", &dres);
         println!("{:#?}", from_slice::<AllMarkets>(&dres));
         // println!("{:#?}", drestest);
     }
