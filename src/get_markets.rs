@@ -27,7 +27,7 @@ pub struct Market {
 
 pub type AllMarkets = Vec<Market>;
 
-pub async fn run(client: JsonRpcClient<Unauthenticated>) -> Result<AllMarkets, &'static str> {
+pub async fn run(client: &JsonRpcClient<Unauthenticated>) -> Result<AllMarkets, &'static str> {
     let request = methods::query::RpcQueryRequest {
         block_reference: BlockReference::Finality(Finality::Final),
         request: QueryRequest::CallFunction {

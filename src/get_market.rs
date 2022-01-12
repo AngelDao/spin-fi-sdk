@@ -7,33 +7,35 @@ use serde::Deserialize;
 use serde_json::{from_slice, json};
 
 #[derive(Debug, Deserialize)]
-pub struct Base {
-    pub ticker: String,
-    pub decimal: u8,
+pub struct Order {
+    pub price: f64,
+    pub quantity: f64,
 }
+
+pub type OrderList = Vec<Order>;
 
 #[derive(Debug, Deserialize)]
-pub struct Quote {
-    pub ticker: String,
-    pub decimal: u8,
+pub struct SingleMarket {
+    pub ask_orders: OrderList,
+    pub bid_orders: OrderList,
 }
 
-#[derive(Debug, Deserialize)]
-pub struct Market {
-    pub id: u8,
-    pub base: Base,
-    pub quote: Quote,
-}
-
-pub type AllMarkets = Vec<Market>;
-
-pub async fn run(client: JsonRpcClient<Unauthenticated>) -> Result<AllMarkets, &'static str> {
+pub async fn run(
+    client: &JsonRpcClient<Unauthenticated>,
+    id: u8,
+) -> Result<SingleMarket, &'static str> {
     let request = methods::query::RpcQueryRequest {
         block_reference: BlockReference::Finality(Finality::Final),
         request: QueryRequest::CallFunction {
             account_id: "app.spin_swap.testnet".parse().expect("fail parse"),
-            method_name: "markets".to_string(),
-            args: FunctionArgs::from("".to_string().into_bytes()),
+            method_name: "view_market".to_string(),
+            args: FunctionArgs::from(
+                json!({
+                    "market_id": id,
+                })
+                .to_string()
+                .into_bytes(),
+            ),
         },
     };
 
@@ -41,9 +43,8 @@ pub async fn run(client: JsonRpcClient<Unauthenticated>) -> Result<AllMarkets, &
 
     match response.kind {
         QueryResponseKind::CallResult(res) => {
-            let rest = from_slice::<AllMarkets>(&res.result).expect("fail");
-            let dres = &rest.len();
-            println!("{:#?}", &rest[0]);
+            let rest = from_slice::<SingleMarket>(&res.result).expect("fail");
+            println!("{:#?}", &rest);
             Ok(rest)
         }
         _ => Err("failed"),
