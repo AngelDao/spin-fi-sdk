@@ -11,6 +11,7 @@ mod connect_wallet;
 mod get_local_seedphrase;
 mod get_market;
 mod get_markets;
+mod post_bid;
 
 use near_crypto::InMemorySigner;
 
@@ -18,9 +19,9 @@ use near_crypto::InMemorySigner;
 async fn main() -> Result<(), ()> {
     let key: String = get_local_seedphrase::run().expect("failed");
     let signer: InMemorySigner = connect_wallet::run("danielw.testnet", &key).expect("failed");
-    println!("{:#?}", signer.account_id);
-
-    // let client = connect_client::run("https://archival-rpc.testnet.near.org");
+    let client = connect_client::run("https://archival-rpc.testnet.near.org");
+    post_bid::run(&client, &signer);
+    // println!("{:#?}", signer.account_id);
     // // get markets
     // let markets: get_markets::AllMarkets = get_markets::run(&client).await.expect("failed");
     // // println!("{:#?}", markets);
