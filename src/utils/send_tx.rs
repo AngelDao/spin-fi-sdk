@@ -7,15 +7,15 @@ use tokio::time;
 
 pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
-    signer: InMemorySigner,
+    signer: &InMemorySigner,
     transaction: Transaction,
-) -> Result<(), &str> {
+) -> Result<(), &'static str> {
     let request = methods::broadcast_tx_async::RpcBroadcastTxAsyncRequest {
-        signed_transaction: transaction.sign(&signer),
+        signed_transaction: transaction.sign(signer),
     };
 
     let sent_at = time::Instant::now();
-    let tx_hash = client.call(request).await?;
+    let tx_hash = client.call(request).await.expect("failed");
 
     loop {
         let response = client
@@ -25,7 +25,8 @@ pub async fn run(
                     account_id: signer.account_id.clone(),
                 },
             })
-            .await;
+            .await
+            .expect("failed");
         let received_at = time::Instant::now();
         let delta = (received_at - sent_at).as_secs();
 
@@ -34,12 +35,12 @@ pub async fn run(
         }
 
         match response {
-            Err(err) => match err.handler_error()? {
+            Err(err) => match err.handler_error().expect("failed") {
                 methods::tx::RpcTransactionError::UnknownTransaction { .. } => {
                     time::sleep(time::Duration::from_secs(2)).await;
                     continue;
                 }
-                err => Err("failed"),
+                _ => Err("failed"),
             },
             Ok(response) => {
                 println!("response gotten after: {}s", delta);
@@ -49,4 +50,9 @@ pub async fn run(
         }
     }
     Ok(())
+    // match ret {
+    //     Ok(..) => Ok(()),
+    //     Err(res) => Err(res),
+    // }
+    // Ok(())
 }

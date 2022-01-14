@@ -2,13 +2,13 @@ use near_crypto::{InMemorySigner, KeyType, SecretKey};
 use near_jsonrpc_client::auth::Unauthenticated;
 use near_jsonrpc_client::{methods, JsonRpcClient};
 use near_jsonrpc_primitives::types::query::QueryResponseKind;
-use near_primitives::transaction::Transaction;
+use near_primitives::transaction::{Action, Transaction};
 use near_primitives::types::BlockReference;
 
 pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
     signer: &InMemorySigner,
-    actions: Vec,
+    actions: Vec<Action>,
 ) -> Result<Transaction, &'static str> {
     let access_key_query_response = client
         .call(methods::query::RpcQueryRequest {
@@ -35,4 +35,5 @@ pub async fn run(
         // can I send multiple of these?
         actions: actions,
     };
+    Ok(transaction)
 }

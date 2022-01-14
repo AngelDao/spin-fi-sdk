@@ -20,7 +20,7 @@ async fn main() -> Result<(), ()> {
     let key: String = get_local_seedphrase::run().expect("failed");
     let signer: InMemorySigner = connect_wallet::run("danielw.testnet", &key).expect("failed");
     let client = connect_client::run("https://archival-rpc.testnet.near.org");
-    post_bid::run(&client, &signer);
+    post_bid::run(&client, &signer).await.expect("failed");
     // println!("{:#?}", signer.account_id);
     // // get markets
     // let markets: get_markets::AllMarkets = get_markets::run(&client).await.expect("failed");
