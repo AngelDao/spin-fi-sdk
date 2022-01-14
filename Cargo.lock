@@ -1767,6 +1767,8 @@ name = "spin-sdk"
 version = "0.1.0"
 dependencies = [
  "borsh",
+ "near-account-id",
+ "near-crypto",
  "near-jsonrpc-client",
  "near-jsonrpc-primitives",
  "near-primitives",
