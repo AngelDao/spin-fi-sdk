@@ -2,9 +2,9 @@ use near_jsonrpc_client::auth::Unauthenticated;
 use near_jsonrpc_client::{methods, JsonRpcClient};
 use near_jsonrpc_primitives::types::query::QueryResponseKind;
 use near_primitives::types::{BlockReference, Finality, FunctionArgs};
-use near_primitives::views::{CallResult, QueryRequest};
+use near_primitives::views::QueryRequest;
 use serde::Deserialize;
-use serde_json::{from_slice, json};
+use serde_json::from_slice;
 
 #[derive(Debug, Deserialize)]
 pub struct Base {

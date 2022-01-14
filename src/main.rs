@@ -12,7 +12,6 @@ mod get_local_seedphrase;
 mod get_market;
 mod get_markets;
 
-use near_account_id::AccountId;
 use near_crypto::InMemorySigner;
 
 #[tokio::main]
