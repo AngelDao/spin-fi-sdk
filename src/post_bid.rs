@@ -32,6 +32,7 @@ pub async fn run(
     let tx: Transaction = create_tx::run(client, signer, actions)
         .await
         .expect("failed");
-    send_tx::run(client, signer, tx);
+    println!("{:#?}", tx);
+    // send_tx::run(client, signer, tx);
     Ok(())
 }

@@ -25,13 +25,13 @@ pub async fn run(
                     account_id: signer.account_id.clone(),
                 },
             })
-            .await
-            .expect("failed");
+            .await;
         let received_at = time::Instant::now();
         let delta = (received_at - sent_at).as_secs();
 
         if delta > 60 {
-            Err("time limit exceeded for the transaction to be recognized");
+            println!("time limit exceeded for the transaction to be recognized");
+            break;
         }
 
         match response {
@@ -40,7 +40,10 @@ pub async fn run(
                     time::sleep(time::Duration::from_secs(2)).await;
                     continue;
                 }
-                _ => Err("failed"),
+                _ => {
+                    println!("failed");
+                    break;
+                }
             },
             Ok(response) => {
                 println!("response gotten after: {}s", delta);
@@ -50,9 +53,4 @@ pub async fn run(
         }
     }
     Ok(())
-    // match ret {
-    //     Ok(..) => Ok(()),
-    //     Err(res) => Err(res),
-    // }
-    // Ok(())
 }

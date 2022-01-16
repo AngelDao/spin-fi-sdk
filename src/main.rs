@@ -21,10 +21,9 @@ async fn main() -> Result<(), ()> {
     let signer: InMemorySigner = connect_wallet::run("danielw.testnet", &key).expect("failed");
     let client = connect_client::run("https://archival-rpc.testnet.near.org");
     post_bid::run(&client, &signer).await.expect("failed");
-    // println!("{:#?}", signer.account_id);
     // // get markets
-    // let markets: get_markets::AllMarkets = get_markets::run(&client).await.expect("failed");
-    // // println!("{:#?}", markets);
+    let markets: get_markets::AllMarkets = get_markets::run(&client).await.expect("failed");
+    // println!("{:#?}", markets);
     // let market: get_market::SingleMarket = get_market::run(&client, markets[0].id)
     //     .await
     //     .expect("failed");
