@@ -12,6 +12,7 @@ pub async fn run(
     signer: &InMemorySigner,
     actions: Vec<Action>,
 ) -> Result<Transaction, &'static str> {
+    println!("public key {:#?}", signer.public_key);
     let access_key_query_response = client
         .call(methods::query::RpcQueryRequest {
             block_reference: BlockReference::latest(),
@@ -21,7 +22,7 @@ pub async fn run(
         })
         .await
         .expect("failed request");
-
+    println!("{:#?}", access_key_query_response.kind);
     let mut nonce: Nonce;
     let mut block_hash: CryptoHash;
     let mut tx: Transaction;
@@ -32,7 +33,7 @@ pub async fn run(
                 block_reference: BlockReference::latest(),
                 request: QueryRequest::ViewAccessKey {
                     account_id: signer.account_id.clone(),
-                    public_key: result.keys[0].public_key.clone(),
+                    public_key: signer.public_key.clone(),
                 },
             })
             .await
@@ -42,13 +43,14 @@ pub async fn run(
             println!("{:#?}", result_1);
             nonce = result_1.nonce;
             println!("block hash{:#?}", block_hash);
+            println!("block hash 0{:#?}", access_key_query_response.block_hash);
             println!("nonce {:#?}", nonce);
             let tx = Transaction {
                 signer_id: signer.account_id.clone(),
                 public_key: signer.public_key.clone(),
                 nonce: nonce + 1,
-                block_hash,
-                receiver_id: "app.spin_swap.testnet".parse().expect("failed type"),
+                block_hash: block_hash,
+                receiver_id: "angeldao.testnet".parse().expect("failed type"),
                 actions: actions,
             };
             Ok(tx)
