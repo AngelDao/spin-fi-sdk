@@ -50,7 +50,7 @@ pub async fn run(
                 public_key: signer.public_key.clone(),
                 nonce: nonce + 1,
                 block_hash: block_hash,
-                receiver_id: "angeldao.testnet".parse().expect("failed type"),
+                receiver_id: "app.spin_swap.testnet".parse().expect("failed type"),
                 actions: actions,
             };
             Ok(tx)

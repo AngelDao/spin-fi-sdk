@@ -16,21 +16,22 @@ pub async fn run(
 ) -> Result<(), ()> {
     let market_id: u8 = 1;
     let ttl: u8 = 60;
-    // let actions: Vec<Action> = vec![Action::FunctionCall(FunctionCallAction {
-    //     method_name: "bid".to_string(),
-    //     args: json!({
-    //         "market_id": market_id,
-    //         "price": "12",
-    //         "quantity": "10",
-    //         "ttl": ttl
-    //     })
-    //     .to_string()
-    //     .into_bytes(),
-    //     gas: 100_000_000_000_000, // 100 TeraGas
-    //     deposit: 0,
-    // })];
+    let actions: Vec<Action> = vec![Action::FunctionCall(FunctionCallAction {
+        method_name: "bid".to_string(),
+        args: json!({
+            "market_id": 1,
+            "price": "12",
+            "quantity": "10",
+            "ttl": 60,
+            "market_order": false,
+        })
+        .to_string()
+        .into_bytes(),
+        gas: 100_000_000_000_000, // 100 TeraGas
+        deposit: 0,
+    })];
     // send 1 yocto
-    let actions: Vec<Action> = vec![Action::Transfer(TransferAction { deposit: 1 })];
+    // let actions: Vec<Action> = vec![Action::Transfer(TransferAction { deposit: 1 })];
     println!("{:#?}", actions);
     let tx: Transaction = create_tx::run(client, signer, actions)
         .await
