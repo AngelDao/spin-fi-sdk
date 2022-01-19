@@ -43,7 +43,7 @@ pub async fn run(client: &JsonRpcClient<Unauthenticated>) -> Result<AllMarkets, 
         QueryResponseKind::CallResult(res) => {
             let rest = from_slice::<AllMarkets>(&res.result).expect("fail");
             let dres = &rest.len();
-            println!("{:#?}", &rest[1]);
+            println!("{:#?}", &rest[0]);
             Ok(rest)
         }
         _ => Err("failed"),

@@ -5,6 +5,8 @@ use near_primitives::transaction::Transaction;
 use near_primitives::transaction::{Action, FunctionCallAction, TransferAction};
 use serde_json::json;
 
+const MAX_DECIMALS: u128 = 1_000_000_000_000_000_000_000_000;
+
 #[path = "./utils/create_tx.rs"]
 mod create_tx;
 #[path = "./utils/send_tx.rs"]
@@ -17,13 +19,10 @@ pub async fn run(
     let market_id: u8 = 1;
     let ttl: u8 = 60;
     let actions: Vec<Action> = vec![Action::FunctionCall(FunctionCallAction {
-        method_name: "bid".to_string(),
+        method_name: "withdraw".to_string(),
         args: json!({
-            "market_id": 1,
-            "price": "12",
-            "quantity": "1000000000000000000000000",
-            "ttl": 60*60*24,
-            "market_order": false,
+            "token": "near.near",
+            "amount": "12",
         })
         .to_string()
         .into_bytes(),
