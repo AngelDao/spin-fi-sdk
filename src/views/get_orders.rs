@@ -34,7 +34,7 @@ pub async fn run(
 
     match response.kind {
         QueryResponseKind::CallResult(res) => {
-            let rest = from_slice::<structs::AllOrders>(&res.result).expect("fail");
+            let rest = from_slice::<structs::AllOrders>(&res.result).expect("fail deserialize");
             println!("{:#?}", &rest);
             Ok(rest)
         }

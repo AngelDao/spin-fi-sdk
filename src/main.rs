@@ -18,7 +18,7 @@ async fn main() -> Result<(), ()> {
     spin_sdk.view_all_markets().await;
     spin_sdk.view_market(1).await;
     spin_sdk.view_all_orders("danielw.testnet", 1).await;
-    spin_sdk.view_order(1, 1).await;
+    spin_sdk.view_order(1, 16474).await;
     // post_bid::run(&client, &signer).await.expect("failed");
     // post_ask::run(&client, &signer).await.expect("failed");
     // post_deposit::run(&client, &signer).await.expect("failed");
