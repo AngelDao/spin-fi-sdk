@@ -5,19 +5,6 @@ use near_jsonrpc_client::auth::Unauthenticated;
 use near_jsonrpc_client::{methods, JsonRpcClient};
 use serde::Deserialize;
 
-// #[path = "./views/get_balance.rs"]
-// mod get_balance;
-// #[path = "./views/get_balances.rs"]
-// mod get_balances;
-// #[path = "./views/get_market.rs"]
-// mod get_market;
-// #[path = "./views/get_markets.rs"]
-// mod get_markets;
-// #[path = "./views/get_order.rs"]
-// mod get_order;
-// #[path = "./views/get_orders.rs"]
-// mod get_orders;
-
 pub struct SpinSDK {
     pub client: JsonRpcClient<Unauthenticated>,
     pub signer: InMemorySigner,

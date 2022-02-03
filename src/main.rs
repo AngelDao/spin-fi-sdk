@@ -1,15 +1,8 @@
-extern crate borsh;
-extern crate near_account_id;
-extern crate near_jsonrpc_client;
-extern crate near_jsonrpc_primitives;
-extern crate near_primitives;
-extern crate serde;
-extern crate serde_json;
-
 mod config;
 mod sdk_struct;
 mod utils;
 mod views;
+
 use crate::config::{config_client, get_local_seedphrase};
 use near_crypto::InMemorySigner;
 
