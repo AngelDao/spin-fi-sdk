@@ -47,3 +47,5 @@ pub struct SingleOrder {
 }
 
 pub type AllOrders = Vec<SingleOrder>;
+
+pub type AllMarkets = Vec<Market>;

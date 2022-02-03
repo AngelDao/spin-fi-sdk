@@ -1,3 +1,5 @@
+#[path = "../utils/structs.rs"]
+use crate::utils::structs;
 use near_jsonrpc_client::auth::Unauthenticated;
 use near_jsonrpc_client::{methods, JsonRpcClient};
 use near_jsonrpc_primitives::types::query::QueryResponseKind;
@@ -5,9 +7,7 @@ use near_primitives::types::{BlockReference, Finality, FunctionArgs};
 use near_primitives::views::QueryRequest;
 use serde::Deserialize;
 use serde_json::{from_slice, json};
-
-#[path = "../utils/structs.rs"]
-pub mod structs;
+// pub mod structs;
 
 pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
