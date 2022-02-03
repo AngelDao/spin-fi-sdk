@@ -4,8 +4,6 @@ use near_jsonrpc_client::{methods, JsonRpcClient};
 use near_jsonrpc_primitives::types::transactions::TransactionInfo;
 use near_primitives::transaction::Transaction;
 use tokio::time;
-#[path = "../connect_client.rs"]
-mod connect_client;
 
 pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,

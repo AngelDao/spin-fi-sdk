@@ -6,32 +6,23 @@ use near_primitives::views::QueryRequest;
 use serde::Deserialize;
 use serde_json::{from_slice, json};
 
-#[derive(Debug, Deserialize)]
-pub struct Order {
-    pub price: f64,
-    pub quantity: f64,
-}
-
-pub type OrderList = Vec<Order>;
-
-#[derive(Debug, Deserialize)]
-pub struct SingleMarket {
-    pub ask_orders: OrderList,
-    pub bid_orders: OrderList,
-}
+#[path = "../utils/structs.rs"]
+pub mod structs;
 
 pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
-    id: u8,
-) -> Result<SingleMarket, &'static str> {
+    account_id: &str,
+    market_id: u32,
+) -> Result<structs::AllOrders, &'static str> {
     let request = methods::query::RpcQueryRequest {
         block_reference: BlockReference::Finality(Finality::Final),
         request: QueryRequest::CallFunction {
-            account_id: "app.spin_swap.testnet".parse().expect("fail parse"),
-            method_name: "view_market".to_string(),
+            account_id: "app_2.spin_swap.testnet".parse().expect("fail parse"),
+            method_name: "get_orders".to_string(),
             args: FunctionArgs::from(
                 json!({
-                    "market_id": id,
+                    "market_id": market_id,
+                    "account_id": account_id,
                 })
                 .to_string()
                 .into_bytes(),
@@ -39,14 +30,17 @@ pub async fn run(
         },
     };
 
-    let response = client.call(request).await.expect("fail");
+    let response = client.call(request).await.expect("failed call");
 
     match response.kind {
         QueryResponseKind::CallResult(res) => {
-            let rest = from_slice::<SingleMarket>(&res.result).expect("fail");
+            let rest = from_slice::<structs::AllOrders>(&res.result).expect("fail");
             println!("{:#?}", &rest);
             Ok(rest)
         }
-        _ => Err("failed"),
+        _ => {
+            println!("failed");
+            Err("failed")
+        }
     }
 }
