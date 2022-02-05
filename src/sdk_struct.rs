@@ -3,7 +3,9 @@ use crate::sends::{
     post_deposit, post_withdraw,
 };
 use crate::utils::structs::{self, PlacedOrder};
-use crate::views::{get_balance, get_balances, get_market, get_markets, get_order, get_orders};
+use crate::views::{
+    get_balance, get_balances, get_market, get_markets, get_order, get_order_history, get_orders,
+};
 use near_crypto::InMemorySigner;
 use near_jsonrpc_client::auth::Unauthenticated;
 use near_jsonrpc_client::{methods, JsonRpcClient};
@@ -46,6 +48,13 @@ impl SpinSDK {
     ) -> Result<structs::SingleOrder, &'static str> {
         get_order::run(&self.client, market_id, order_id).await
     }
+    pub async fn view_order_history(
+        &self,
+        account_id: &str,
+        market_id: u8,
+    ) -> Result<(), &'static str> {
+        get_order_history::run(&self.client, account_id, market_id.into()).await
+    }
 }
 
 // // send
@@ -79,10 +88,10 @@ impl SpinSDK {
     }
 
     pub async fn send_cancel_market_orders(&self, market_id: u8) -> Result<(), ()> {
-        post_cancel_order::run(&self.client, &self.signer, market_id).await
+        post_cancel_market_orders::run(&self.client, &self.signer, market_id).await
     }
 
     pub async fn send_cancel_all_orders(&self) -> Result<(), ()> {
-        post_cancel_order::run(&self.client, &self.signer).await
+        post_cancel_all_orders::run(&self.client, &self.signer).await
     }
 }

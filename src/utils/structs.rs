@@ -55,6 +55,22 @@ pub struct PlacedOrder {
     pub market_order: bool,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct HistoricalOrder {
+    id: u64,
+    side: String,
+    o_type: String,
+    execution_price: u128,
+    price: u128,
+    quantity: u128,
+    status: String,
+    remaining: u128,
+    created_at: u128,
+    updated_at: u128,
+}
+
+pub type OrderHistory = Vec<HistoricalOrder>;
+
 pub type AllOrders = Vec<SingleOrder>;
 
 pub type AllMarkets = Vec<Market>;

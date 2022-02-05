@@ -18,6 +18,7 @@ async fn main() -> Result<(), ()> {
     spin_sdk.view_all_markets().await;
     spin_sdk.view_market(1).await;
     // spin_sdk.view_all_orders("danielw.testnet", 1).await;
+    spin_sdk.view_order_history("danielw.testnet", 1).await;
     // spin_sdk.view_order(1, 16474).await;
     // spin_sdk.send_deposit(1.0, "near.near", 24).await;
     // spin_sdk.send_deposit(0.70, "spfi_usdc.testnet", 24).await;
@@ -43,5 +44,8 @@ async fn main() -> Result<(), ()> {
     //     market_order: false,
     // };
     // spin_sdk.send_ask(po2, 24).await;
+    // spin_sdk.send_cancel_order(1, 19686).await;
+    // spin_sdk.send_cancel_market_orders(1).await;
+    // spin_sdk.send_cancel_all_orders().await;
     Ok(())
 }
