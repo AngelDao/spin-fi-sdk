@@ -13,7 +13,7 @@ pub async fn run(
     let request = methods::query::RpcQueryRequest {
         block_reference: BlockReference::Finality(Finality::Final),
         request: QueryRequest::CallFunction {
-            account_id: "app.spin_swap.testnet".parse().expect("fail parse"),
+            account_id: "app_2.spin_swap.testnet".parse().expect("fail parse"),
             method_name: "get_all_deposits".to_string(),
             args: FunctionArgs::from(
                 json!({

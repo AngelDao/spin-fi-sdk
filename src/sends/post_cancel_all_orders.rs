@@ -9,26 +9,12 @@ use serde_json::json;
 pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
     signer: &InMemorySigner,
-    order: PlacedOrder,
-    decimals: u8,
 ) -> Result<(), ()> {
+    let market_id: u8 = 1;
+    let ttl: u8 = 60;
     let actions: Vec<Action> = vec![Action::FunctionCall(FunctionCallAction {
-        method_name: "ask".to_string(),
-        args: json!({
-            "market_id": order.market_id,
-            "price": format!(
-                "{}",
-                (order.price * (10 as u128).pow(decimals.into()) as f64) as u128
-            ),
-            "quantity": format!(
-                "{}",
-                (order.quantity * (10 as u128).pow(decimals.into()) as f64) as u128
-            ),
-            "ttl": order.ttl,
-            "market_order": order.market_order,
-        })
-        .to_string()
-        .into_bytes(),
+        method_name: "drop_all_orders".to_string(),
+        args: json!({}).to_string().into_bytes(),
         gas: 100_000_000_000_000, // 100 TeraGas
         deposit: 0,
     })];

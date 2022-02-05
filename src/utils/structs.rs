@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
 pub struct Base {
@@ -44,6 +44,15 @@ pub struct SingleOrder {
     pub created_at: u128,
     pub expiration_time: u128,
     pub o_type: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PlacedOrder {
+    pub market_id: u8,
+    pub price: f64,
+    pub quantity: f64,
+    pub ttl: u64,
+    pub market_order: bool,
 }
 
 pub type AllOrders = Vec<SingleOrder>;

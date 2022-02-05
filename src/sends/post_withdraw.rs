@@ -1,3 +1,4 @@
+use crate::utils::{create_tx, send_tx};
 use near_crypto::{InMemorySigner, KeyType, SecretKey};
 use near_jsonrpc_client::auth::Unauthenticated;
 use near_jsonrpc_client::JsonRpcClient;
@@ -5,34 +6,35 @@ use near_primitives::transaction::Transaction;
 use near_primitives::transaction::{Action, FunctionCallAction, TransferAction};
 use serde_json::json;
 
-const MAX_DECIMALS: u128 = 1_000_000_000_000_000_000_000_000;
-
-#[path = "./utils/create_tx.rs"]
-mod create_tx;
-#[path = "./utils/send_tx.rs"]
-mod send_tx;
-
 pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
     signer: &InMemorySigner,
+    amount: f64,
+    token: &str,
+    decimals: u8,
 ) -> Result<(), ()> {
-    let market_id: u8 = 1;
-    let ttl: u8 = 60;
+    let mut deposit_val: u128;
+
+    if token == "near.near" {
+        deposit_val = 0;
+    } else {
+        deposit_val = 1;
+    };
     let actions: Vec<Action> = vec![Action::FunctionCall(FunctionCallAction {
         method_name: "withdraw".to_string(),
         args: json!({
-            "token": "near.near",
-            "amount": "12",
+            "token": token,
+            "amount": format!("{}",(amount * (10 as u128).pow(decimals.into()) as f64) as u128),
         })
         .to_string()
         .into_bytes(),
         gas: 100_000_000_000_000, // 100 TeraGas
-        deposit: 0,
+        deposit: deposit_val,
     })];
     // send 1 yocto
     // let actions: Vec<Action> = vec![Action::Transfer(TransferAction { deposit: 1 })];
     println!("{:#?}", actions);
-    let tx: Transaction = create_tx::run(client, signer, actions)
+    let tx: Transaction = create_tx::run(client, signer, actions, "app_2.spin_swap.testnet")
         .await
         .expect("failed");
     println!("{:#?}", tx);

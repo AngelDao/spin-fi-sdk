@@ -1,4 +1,8 @@
-use crate::utils::structs;
+use crate::sends::{
+    post_ask, post_bid, post_cancel_all_orders, post_cancel_market_orders, post_cancel_order,
+    post_deposit, post_withdraw,
+};
+use crate::utils::structs::{self, PlacedOrder};
 use crate::views::{get_balance, get_balances, get_market, get_markets, get_order, get_orders};
 use near_crypto::InMemorySigner;
 use near_jsonrpc_client::auth::Unauthenticated;
@@ -45,6 +49,40 @@ impl SpinSDK {
 }
 
 // // send
-// impl SpinSDK {
-//     pub async fn
-// }
+impl SpinSDK {
+    pub async fn send_deposit(
+        &self,
+        amount: f64,
+        contract_id: &str,
+        decimals: u8,
+    ) -> Result<(), ()> {
+        post_deposit::run(&self.client, &self.signer, amount, contract_id, decimals).await
+    }
+    pub async fn send_withdrawal(
+        &self,
+        amount: f64,
+        contract_id: &str,
+        decimals: u8,
+    ) -> Result<(), ()> {
+        post_withdraw::run(&self.client, &self.signer, amount, contract_id, decimals).await
+    }
+    pub async fn send_bid(&self, order: PlacedOrder, decimals: u8) -> Result<(), ()> {
+        post_bid::run(&self.client, &self.signer, order, decimals).await
+    }
+
+    pub async fn send_ask(&self, order: PlacedOrder, decimals: u8) -> Result<(), ()> {
+        post_ask::run(&self.client, &self.signer, order, decimals).await
+    }
+
+    pub async fn send_cancel_order(&self, market_id: u8, order_id: u64) -> Result<(), ()> {
+        post_cancel_order::run(&self.client, &self.signer, market_id, order_id).await
+    }
+
+    pub async fn send_cancel_market_orders(&self, market_id: u8) -> Result<(), ()> {
+        post_cancel_order::run(&self.client, &self.signer, market_id).await
+    }
+
+    pub async fn send_cancel_all_orders(&self) -> Result<(), ()> {
+        post_cancel_order::run(&self.client, &self.signer).await
+    }
+}

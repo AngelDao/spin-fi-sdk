@@ -11,7 +11,9 @@ pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
     signer: &InMemorySigner,
     actions: Vec<Action>,
+    receiver_id: &str,
 ) -> Result<Transaction, &'static str> {
+    println!("reciever_id {}", receiver_id);
     println!("public key {:#?}", signer.public_key);
     let access_key_query_response = client
         .call(methods::query::RpcQueryRequest {
@@ -50,7 +52,7 @@ pub async fn run(
                 public_key: signer.public_key.clone(),
                 nonce: nonce + 1,
                 block_hash: block_hash,
-                receiver_id: "app.spin_swap.testnet".parse().expect("failed type"),
+                receiver_id: receiver_id.parse().expect("failed type"),
                 actions: actions,
             };
             Ok(tx)
