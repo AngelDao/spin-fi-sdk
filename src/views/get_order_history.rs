@@ -13,11 +13,13 @@ pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
     account_id: &str,
     market_id: u32,
-) -> Result<(), &'static str> {
+) -> Result<structs::OrderHistory, &'static str> {
     let request = methods::query::RpcQueryRequest {
         block_reference: BlockReference::Finality(Finality::Final),
         request: QueryRequest::CallFunction {
-            account_id: "app_2.spin_swap.testnet".parse().expect("fail parse"),
+            account_id: "app_2.spin_swap.testnet"
+                .parse()
+                .expect("failed accountid parse"),
             method_name: "get_order_history".to_string(),
             args: FunctionArgs::from(
                 json!(  {
@@ -32,13 +34,13 @@ pub async fn run(
         },
     };
 
-    let response = client.call(request).await.expect("failed call");
+    let response = client.call(request).await.unwrap();
 
     match response.kind {
         QueryResponseKind::CallResult(res) => {
             let rest = from_slice::<structs::OrderHistory>(&res.result).expect("fail deserialize");
             println!("{:#?}", &rest);
-            Ok(())
+            Ok(rest)
         }
         _ => {
             println!("failed");

@@ -9,7 +9,7 @@ use std::collections::HashMap;
 pub async fn run(
     client: &JsonRpcClient<Unauthenticated>,
     account_id: &str,
-) -> Result<(), &'static str> {
+) -> Result<HashMap<String, String>, &'static str> {
     let request = methods::query::RpcQueryRequest {
         block_reference: BlockReference::Finality(Finality::Final),
         request: QueryRequest::CallFunction {
@@ -31,7 +31,7 @@ pub async fn run(
         QueryResponseKind::CallResult(res) => {
             let rest = from_slice::<HashMap<String, String>>(&res.result).expect("fail");
             println!("{:#?}", &rest);
-            Ok(())
+            Ok(rest)
         }
         _ => Err("failed"),
     }

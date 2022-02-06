@@ -2,13 +2,15 @@ use crate::sends::{
     post_ask, post_bid, post_cancel_all_orders, post_cancel_market_orders, post_cancel_order,
     post_deposit, post_withdraw,
 };
-use crate::utils::structs::{self, PlacedOrder};
+use crate::utils::structs::{self, OrderHistory, PlacedOrder};
 use crate::views::{
     get_balance, get_balances, get_market, get_markets, get_order, get_order_history, get_orders,
 };
 use near_crypto::InMemorySigner;
 use near_jsonrpc_client::auth::Unauthenticated;
 use near_jsonrpc_client::{methods, JsonRpcClient};
+use std::collections::HashMap;
+
 use serde::Deserialize;
 
 pub struct SpinSDK {
@@ -18,7 +20,10 @@ pub struct SpinSDK {
 
 // views
 impl SpinSDK {
-    pub async fn view_all_balances(&self, account_id: &str) -> Result<(), &'static str> {
+    pub async fn view_all_balances(
+        &self,
+        account_id: &str,
+    ) -> Result<HashMap<String, String>, &'static str> {
         get_balances::run(&self.client, account_id).await
     }
     pub async fn view_balance(
@@ -52,12 +57,12 @@ impl SpinSDK {
         &self,
         account_id: &str,
         market_id: u8,
-    ) -> Result<(), &'static str> {
+    ) -> Result<OrderHistory, &'static str> {
         get_order_history::run(&self.client, account_id, market_id.into()).await
     }
 }
 
-// // send
+// sends
 impl SpinSDK {
     pub async fn send_deposit(
         &self,

@@ -1,5 +1,5 @@
 mod config;
-mod sdk_struct;
+mod sdk;
 mod sends;
 mod utils;
 mod views;
@@ -11,16 +11,16 @@ use near_crypto::InMemorySigner;
 #[tokio::main]
 async fn main() -> Result<(), ()> {
     let key: String = get_local_seedphrase::run().expect("failed");
-    let spin_sdk: sdk_struct::SpinSDK =
+    let spin_sdk: sdk::SpinSDK =
         config_client::initialize("https://rpc.testnet.near.org", "danielw.testnet", &key);
-    spin_sdk.view_all_balances("danielw.testnet").await;
-    spin_sdk.view_balance("danielw.testnet", "near.near").await;
-    spin_sdk.view_all_markets().await;
-    spin_sdk.view_market(1).await;
+    // spin_sdk.view_all_balances("danielw.testnet").await;
+    // spin_sdk.view_balance("danielw.testnet", "near.near").await;
+    // spin_sdk.view_all_markets().await;
+    // spin_sdk.view_market(1).await;
     // spin_sdk.view_all_orders("danielw.testnet", 1).await;
-    spin_sdk.view_order_history("danielw.testnet", 1).await;
+    // spin_sdk.view_order_history("danielw.testnet", 1).await;
     // spin_sdk.view_order(1, 16474).await;
-    // spin_sdk.send_deposit(1.0, "near.near", 24).await;
+    spin_sdk.send_deposit(1.0, "near.near", 24).await;
     // spin_sdk.send_deposit(0.70, "spfi_usdc.testnet", 24).await;
     // spin_sdk.send_withdrawal(1.0, "near.near", 24).await;
     // spin_sdk
