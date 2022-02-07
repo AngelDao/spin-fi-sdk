@@ -19,7 +19,7 @@ pub async fn run(
 
     let sent_at = time::Instant::now();
     let tx_hash = client.call(request).await.unwrap();
-    println!("{:#?}", tx_hash);
+    // println!("{:#?}", tx_hash);
     loop {
         let response = client
             .call(methods::tx::RpcTransactionStatusRequest {

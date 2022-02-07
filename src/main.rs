@@ -13,7 +13,7 @@ async fn main() -> Result<(), ()> {
     let key: String = get_local_seedphrase::run().expect("failed");
     let spin_sdk: sdk::SpinSDK =
         config_client::initialize("https://rpc.testnet.near.org", "danielw.testnet", &key);
-    // spin_sdk.view_all_balances("danielw.testnet").await;
+    spin_sdk.view_all_balances("danielw.testnet").await;
     // spin_sdk.view_balance("danielw.testnet", "near.near").await;
     // spin_sdk.view_all_markets().await;
     // spin_sdk.view_market(1).await;

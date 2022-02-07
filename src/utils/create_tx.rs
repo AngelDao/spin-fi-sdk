@@ -13,8 +13,8 @@ pub async fn run(
     actions: Vec<Action>,
     receiver_id: &str,
 ) -> Result<Transaction, &'static str> {
-    println!("reciever_id {}", receiver_id);
-    println!("public key {:#?}", signer.public_key);
+    // println!("reciever_id {}", receiver_id);
+    // println!("public key {:#?}", signer.public_key);
     let access_key_query_response = client
         .call(methods::query::RpcQueryRequest {
             block_reference: BlockReference::latest(),
@@ -24,12 +24,12 @@ pub async fn run(
         })
         .await
         .expect("failed request");
-    println!("{:#?}", access_key_query_response.kind);
+    // println!("{:#?}", access_key_query_response.kind);
     let mut nonce: Nonce;
     let mut block_hash: CryptoHash;
     let mut tx: Transaction;
     if let QueryResponseKind::AccessKeyList(result) = access_key_query_response.kind {
-        println!("{:#?}", result.keys[0].public_key.clone());
+        // println!("{:#?}", result.keys[0].public_key.clone());
         let access_key_query_response_1 = client
             .call(methods::query::RpcQueryRequest {
                 block_reference: BlockReference::latest(),
@@ -42,11 +42,11 @@ pub async fn run(
             .expect("failed request");
         block_hash = access_key_query_response_1.block_hash;
         if let QueryResponseKind::AccessKey(result_1) = access_key_query_response_1.kind {
-            println!("{:#?}", result_1);
+            // println!("{:#?}", result_1);
             nonce = result_1.nonce;
-            println!("block hash{:#?}", block_hash);
-            println!("block hash 0{:#?}", access_key_query_response.block_hash);
-            println!("nonce {:#?}", nonce);
+            // println!("block hash{:#?}", block_hash);
+            // println!("block hash 0{:#?}", access_key_query_response.block_hash);
+            // println!("nonce {:#?}", nonce);
             let tx = Transaction {
                 signer_id: signer.account_id.clone(),
                 public_key: signer.public_key.clone(),

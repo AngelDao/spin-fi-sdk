@@ -34,11 +34,11 @@ pub async fn run(
     })];
     // send 1 yocto
     // let actions: Vec<Action> = vec![Action::Transfer(TransferAction { deposit: 1 })];
-    println!("{:#?}", actions);
+    // println!("{:#?}", actions);
     let tx: Transaction = create_tx::run(client, signer, actions, "app_2.spin_swap.testnet")
         .await
         .expect("failed");
-    println!("{:#?}", tx);
+    // println!("{:#?}", tx);
     send_tx::run(client, signer, tx).await.expect("failed send");
     Ok(())
 }
